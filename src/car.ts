@@ -5,6 +5,12 @@ class Car {
   public y: number;
   public width: number;
   public height: number;
+
+  public speed: number = 0;
+  public acceleration: number = 0.2;
+  public maxSpeed: number = 3;
+  public friction: number = 0.95;
+
   public controls: Controls;
 
   constructor(x: number, y: number, width: number, height: number) {
@@ -18,11 +24,21 @@ class Car {
 
   update() {
     if (this.controls.forward) {
-      this.y -= 2;
+      this.speed += this.acceleration;
     }
     if (this.controls.reverse) {
-      this.y += 2;
+      this.speed -= this.acceleration;
     }
+
+    if (this.speed > 0) {
+      this.speed = Math.min(this.speed, this.maxSpeed);
+    } else {
+      this.speed = Math.max(this.speed, -this.maxSpeed / 2);
+    }
+
+    this.speed *= this.friction;
+
+    this.y -= this.speed;
   }
 
   draw(ctx: CanvasRenderingContext2D) {

@@ -1,8 +1,12 @@
-import './style.css'
+import Car from "./car";
+import "./style.css";
 
-const app = document.querySelector<HTMLDivElement>('#app')!
+const canvas = document.querySelector<HTMLCanvasElement>("#canvas")!;
 
-app.innerHTML = `
-  <h1>Hello Vite!</h1>
-  <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
-`
+canvas.height = window.innerHeight;
+canvas.width = 200;
+
+const ctx = canvas.getContext("2d")!;
+const car = new Car(100, 100, 20, 40);
+
+car.draw(ctx);

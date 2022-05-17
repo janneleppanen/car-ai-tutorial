@@ -46,7 +46,7 @@ class Car {
       this.speed -= this.acceleration;
     }
 
-    if (this.speed !== 0) {
+    if (Math.abs(this.speed) > 0.5) {
       const flip = this.speed > 0 ? 1 : -1;
 
       if (this.controls.left) {

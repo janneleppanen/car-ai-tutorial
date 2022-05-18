@@ -1,5 +1,10 @@
 import { lerp } from "./utils";
 
+type Point = {
+  x: number;
+  y: number;
+};
+
 class Road {
   public x: number;
   public width: number;
@@ -8,6 +13,7 @@ class Road {
   public right: number;
   public top: number;
   public bottom: number;
+  public borders: Point[][];
 
   constructor(x: number, width: number, laneCount: number = 3) {
     this.x = x;
@@ -20,6 +26,15 @@ class Road {
     const infinity = 100000;
     this.top = -infinity;
     this.bottom = infinity;
+
+    const topLeft = { x: this.left, y: this.top };
+    const bottomLeft = { x: this.left, y: this.bottom };
+    const topRight = { x: this.right, y: this.top };
+    const bottomRight = { x: this.right, y: this.bottom };
+    this.borders = [
+      [topLeft, bottomLeft],
+      [topRight, bottomRight],
+    ];
   }
 
   getLaneCenter(laneIndex: number) {
@@ -39,12 +54,19 @@ class Road {
       const x = lerp(this.left, this.right, i / this.laneCount);
 
       ctx.setLineDash([20, 20]);
-
       ctx.beginPath();
       ctx.moveTo(x, this.top);
       ctx.lineTo(x, this.bottom);
       ctx.stroke();
     }
+
+    ctx.setLineDash([]);
+    this.borders.forEach((border) => {
+      ctx.beginPath();
+      ctx.moveTo(border[0].x, border[0].y);
+      ctx.lineTo(border[1].x, border[1].y);
+      ctx.stroke();
+    });
   }
 }
 

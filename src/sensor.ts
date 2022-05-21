@@ -21,15 +21,15 @@ class Sensor {
   }
 
   update(roadBorders: Point[][]) {
-    this.#castRays();
+    this.castRays();
     this.readings = [];
 
     this.rays.forEach((ray) => {
-      this.readings.push(this.#getReading(ray, roadBorders));
+      this.readings.push(this.getReading(ray, roadBorders));
     });
   }
 
-  #getReading(ray: Point[], roadBorders: Point[][]) {
+  private getReading(ray: Point[], roadBorders: Point[][]) {
     let touches: OffsetPoint[] = [];
 
     roadBorders.forEach((roadBorder) => {
@@ -53,7 +53,7 @@ class Sensor {
     return touches.find((touch) => touch.offset === minOffset);
   }
 
-  #castRays() {
+  private castRays() {
     this.rays = [];
 
     for (let i = 0; i < this.rayCount; i++) {

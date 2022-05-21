@@ -5,10 +5,10 @@ class Controls {
   public reverse: boolean = false;
 
   constructor() {
-    this.#addKeyboardListeners();
+    this.addKeyboardListeners();
   }
 
-  #addKeyboardListeners = () => {
+  private addKeyboardListeners = () => {
     document.onkeydown = (e: KeyboardEvent) => {
       switch (e.key) {
         case "ArrowUp":

@@ -28,7 +28,7 @@ class Car {
   }
 
   update(roadBorders: Point[][]) {
-    this.#move();
+    this.move();
     this.sensor.update(roadBorders);
   }
 
@@ -45,7 +45,7 @@ class Car {
     this.sensor.draw(ctx);
   }
 
-  #move() {
+  private move() {
     if (this.controls.forward) {
       this.speed += this.acceleration;
     }

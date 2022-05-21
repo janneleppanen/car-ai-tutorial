@@ -1,5 +1,6 @@
 import Controls from "./controls";
 import Sensor from "./sensor";
+import { Point } from "./types";
 
 class Car {
   public x: number;
@@ -26,9 +27,9 @@ class Car {
     this.controls = new Controls();
   }
 
-  update() {
+  update(roadBorders: Point[][]) {
     this.#move();
-    this.sensor.update();
+    this.sensor.update(roadBorders);
   }
 
   draw(ctx: CanvasRenderingContext2D) {

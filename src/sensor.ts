@@ -1,5 +1,6 @@
 import Car from "./car";
-import { lerp } from "./utils";
+import { OffsetPoint } from "./types";
+import { getIntersection, lerp } from "./utils";
 
 type Point = {
   x: number;
@@ -12,6 +13,7 @@ class Sensor {
   public rayLength: number;
   public raySpread: number;
   public rays: Point[][];
+  public readings: (OffsetPoint | undefined)[];
 
   constructor(car: Car) {
     this.car = car;
@@ -20,9 +22,43 @@ class Sensor {
     this.raySpread = Math.PI / 4;
 
     this.rays = [];
+    this.readings = [];
   }
 
-  update() {
+  update(roadBorders: Point[][]) {
+    this.#castRays();
+    this.readings = [];
+
+    this.rays.forEach((ray) => {
+      this.readings.push(this.#getReading(ray, roadBorders));
+    });
+  }
+
+  #getReading(ray: Point[], roadBorders: Point[][]) {
+    let touches: OffsetPoint[] = [];
+
+    roadBorders.forEach((roadBorder) => {
+      const touch = getIntersection(
+        ray[0],
+        ray[1],
+        roadBorder[0],
+        roadBorder[1]
+      );
+      if (touch) {
+        touches.push(touch);
+      }
+    });
+
+    if (touches.length === 0) {
+      return undefined;
+    }
+
+    const offsets = touches.map((touch) => touch.offset);
+    const minOffset = Math.min(...offsets);
+    return touches.find((touch) => touch.offset === minOffset);
+  }
+
+  #castRays() {
     this.rays = [];
 
     for (let i = 0; i < this.rayCount; i++) {
@@ -44,12 +80,25 @@ class Sensor {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    this.rays.forEach((ray) => {
+    this.rays.forEach((ray, index) => {
+      let end: Point = ray[1];
+
+      if (this.readings[index]) {
+        end = this.readings[index] as Point;
+      }
+
       ctx.beginPath();
       ctx.lineWidth = 2;
       ctx.strokeStyle = "yellow";
       ctx.moveTo(ray[0].x, ray[0].y);
-      ctx.lineTo(ray[1].x, ray[1].y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "black";
+      ctx.moveTo(ray[1].x, ray[1].y);
+      ctx.lineTo(end.x, end.y);
       ctx.stroke();
     });
   }

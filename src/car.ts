@@ -1,4 +1,5 @@
 import Controls from "./controls";
+import Sensor from "./sensor";
 
 class Car {
   public x: number;
@@ -12,6 +13,7 @@ class Car {
   public friction: number = 0.95;
   public angle: number = 0;
 
+  public sensor: Sensor;
   public controls: Controls;
 
   constructor(x: number, y: number, width: number, height: number) {
@@ -20,11 +22,13 @@ class Car {
     this.width = width;
     this.height = height;
 
+    this.sensor = new Sensor(this);
     this.controls = new Controls();
   }
 
   update() {
     this.#move();
+    this.sensor.update();
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -36,6 +40,8 @@ class Car {
     ctx.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     ctx.fill();
     ctx.restore();
+
+    this.sensor.draw(ctx);
   }
 
   #move() {

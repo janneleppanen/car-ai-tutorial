@@ -1,11 +1,6 @@
 import Car from "./car";
-import { OffsetPoint } from "./types";
+import { OffsetPoint, Point } from "./types";
 import { getIntersection, lerp } from "./utils";
-
-type Point = {
-  x: number;
-  y: number;
-};
 
 class Sensor {
   public car: Car;

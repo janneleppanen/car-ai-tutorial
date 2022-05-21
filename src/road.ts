@@ -1,9 +1,5 @@
+import { Point } from "./types";
 import { lerp } from "./utils";
-
-type Point = {
-  x: number;
-  y: number;
-};
 
 class Road {
   public x: number;

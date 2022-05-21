@@ -24,8 +24,8 @@ class Sensor {
     this.castRays();
     this.readings = [];
 
-    this.rays.forEach((ray) => {
-      this.readings.push(this.getReading(ray, roadBorders));
+    this.readings = this.rays.map((ray) => {
+      return this.getReading(ray, roadBorders);
     });
   }
 

@@ -23,3 +23,16 @@ export function getIntersection(A: Point, B: Point, C: Point, D: Point) {
 
   return null;
 }
+
+export function polysIntersect(poly1: Point[], poly2: Point[]) {
+  return poly1.find((_, index1) => {
+    return !!poly2.find((_, index2) => {
+      return getIntersection(
+        poly1[index1],
+        poly1[(index1 + 1) % poly1.length],
+        poly2[index2],
+        poly2[(index2 + 1) % poly2.length]
+      );
+    });
+  });
+}

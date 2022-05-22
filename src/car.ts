@@ -3,6 +3,8 @@ import Sensor from "./sensor";
 import { Point } from "./types";
 import { polysIntersect } from "./utils";
 
+type ControlType = "KEYS" | "DUMMY";
+
 class Car {
   public x: number;
   public y: number;
@@ -11,23 +13,33 @@ class Car {
 
   public speed: number = 0;
   public acceleration: number = 0.2;
-  public maxSpeed: number = 3;
   public friction: number = 0.95;
   public angle: number = 0;
+  public maxSpeed: number;
 
-  public sensor: Sensor;
+  public sensor?: Sensor;
   public controls: Controls;
   public polygon: Point[] = [];
   public damaged = false;
 
-  constructor(x: number, y: number, width: number, height: number) {
+  constructor(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    controlType: ControlType,
+    maxSpeed: number = 3
+  ) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
+    this.maxSpeed = maxSpeed;
 
-    this.sensor = new Sensor(this);
-    this.controls = new Controls();
+    if (controlType === "KEYS") {
+      this.sensor = new Sensor(this);
+    }
+    this.controls = new Controls(controlType);
   }
 
   update(roadBorders: Point[][]) {
@@ -37,7 +49,9 @@ class Car {
       this.damaged = this.assessDamage(roadBorders);
     }
 
-    this.sensor.update(roadBorders);
+    if (this.sensor) {
+      this.sensor.update(roadBorders);
+    }
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -52,7 +66,9 @@ class Car {
 
     ctx.fill();
 
-    this.sensor.draw(ctx);
+    if (this.sensor) {
+      this.sensor.draw(ctx);
+    }
   }
 
   private move() {

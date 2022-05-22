@@ -4,8 +4,15 @@ class Controls {
   public right: boolean = false;
   public reverse: boolean = false;
 
-  constructor() {
-    this.addKeyboardListeners();
+  constructor(type: string) {
+    switch (type) {
+      case "KEYS":
+        this.addKeyboardListeners();
+        break;
+      case "DUMMY":
+        this.forward = true;
+        break;
+    }
   }
 
   private addKeyboardListeners = () => {

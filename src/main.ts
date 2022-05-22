@@ -19,12 +19,12 @@ function animate() {
   ctx.save();
   ctx.translate(0, -car.y + canvas.height * 0.7);
 
-  car.update(road.borders);
-  traffic.forEach((c) => c.update(road.borders));
+  traffic.forEach((c) => c.update(road.borders, []));
+  car.update(road.borders, traffic);
 
   road.draw(ctx);
+  traffic.forEach((c) => c.draw(ctx, "tomato"));
   car.draw(ctx);
-  traffic.forEach((c) => c.draw(ctx));
 
   ctx.restore();
   requestAnimationFrame(animate);

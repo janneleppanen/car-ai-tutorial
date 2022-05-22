@@ -42,20 +42,20 @@ class Car {
     this.controls = new Controls(controlType);
   }
 
-  update(roadBorders: Point[][]) {
+  update(roadBorders: Point[][], traffic: Car[]) {
     if (!this.damaged) {
       this.move();
       this.polygon = this.createPolygon();
-      this.damaged = this.assessDamage(roadBorders);
+      this.damaged = this.assessDamage(roadBorders, traffic);
     }
 
     if (this.sensor) {
-      this.sensor.update(roadBorders);
+      this.sensor.update(roadBorders, traffic);
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = this.damaged ? "gray" : "black";
+  draw(ctx: CanvasRenderingContext2D, color: string = "blue") {
+    ctx.fillStyle = this.damaged ? "gray" : color;
 
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
@@ -130,10 +130,20 @@ class Car {
     return points;
   }
 
-  private assessDamage(roadBorders: Point[][]) {
-    return !!roadBorders.find((border) => {
-      return polysIntersect(this.polygon, border);
-    });
+  private assessDamage(roadBorders: Point[][], traffic: Car[]) {
+    for (let i = 0; i < roadBorders.length; i++) {
+      if (polysIntersect(this.polygon, roadBorders[i])) {
+        return true;
+      }
+    }
+
+    for (let i = 0; i < traffic.length; i++) {
+      if (polysIntersect(this.polygon, traffic[i].polygon)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

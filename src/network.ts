@@ -20,20 +20,20 @@ export class NeuralNetwork {
   }
 }
 
-class Level {
+export class Level {
   public inputs: number[];
   public outputs: number[];
   public biases: number[];
-  public weight: number[][];
+  public weights: number[][];
 
   constructor(inputCount: number, outputCount: number) {
     this.inputs = new Array(inputCount);
     this.outputs = new Array(outputCount);
     this.biases = new Array(outputCount);
 
-    this.weight = [];
+    this.weights = [];
     for (let i = 0; i < this.inputs.length; i++) {
-      this.weight.push(new Array(outputCount));
+      this.weights.push(new Array(outputCount));
     }
 
     Level.randomize(this);
@@ -42,7 +42,7 @@ class Level {
   static randomize(level: Level) {
     for (let i = 0; i < level.inputs.length; i++) {
       for (let j = 0; j < level.outputs.length; j++) {
-        level.weight[i][j] = Math.random() * 2 - 1;
+        level.weights[i][j] = Math.random() * 2 - 1;
       }
     }
 
@@ -59,7 +59,7 @@ class Level {
     for (let i = 0; i < level.outputs.length; i++) {
       let sum = 0;
       for (let j = 0; j < level.inputs.length; j++) {
-        sum += level.inputs[j] * level.weight[j][i];
+        sum += level.inputs[j] * level.weights[j][i];
       }
 
       if (sum > level.biases[i]) {

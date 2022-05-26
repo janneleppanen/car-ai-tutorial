@@ -1,4 +1,5 @@
 import Car from "./car";
+import { NeuralNetwork } from "./network";
 import Road from "./road";
 import "./style.css";
 import Visualizer from "./vizualizer";
@@ -26,7 +27,16 @@ const traffic = [
 let bestCar: Car = cars[0];
 
 if (localStorage.getItem("bestBrain")) {
-  bestCar.brain = JSON.parse(localStorage.getItem("bestBrain") || "");
+  for (let i = 0; i < cars.length; i++) {
+    const bestBrain = JSON.parse(
+      localStorage.getItem("bestBrain") || ""
+    ) as NeuralNetwork;
+    cars[i].brain = bestBrain;
+    if (i != 0 && cars[i].brain) {
+      NeuralNetwork.mutate(cars[i].brain as NeuralNetwork, 0.05);
+    }
+    console.log(cars[i].brain);
+  }
 }
 
 animate();

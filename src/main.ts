@@ -17,7 +17,11 @@ const networkCtx = networkCanvas.getContext("2d")!;
 
 const road = new Road(roadCanvas.width / 2, roadCanvas.width * 0.9);
 const cars = generateCars(100);
-const traffic = [new Car(road.getLaneCenter(1), 400, 30, 50, "DUMMY")];
+const traffic = [
+  new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(0), -300, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(2), -300, 30, 50, "DUMMY", 2),
+];
 
 let bestCar: Car = cars[0];
 
@@ -38,7 +42,7 @@ function discard() {
 function generateCars(n: number) {
   const cars = [];
   for (let i = 0; i < n; i++) {
-    cars.push(new Car(road.getLaneCenter(1), 500, 30, 50, "AI", 5));
+    cars.push(new Car(road.getLaneCenter(1), 300, 30, 50, "AI", 5));
   }
   return cars;
 }

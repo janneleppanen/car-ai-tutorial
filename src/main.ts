@@ -40,7 +40,7 @@ if (localStorage.getItem("bestBrain")) {
     cars[i].brain = bestBrain;
 
     if (i != 0 && cars[i].brain) {
-      NeuralNetwork.mutate(cars[i].brain as NeuralNetwork, 0.3);
+      NeuralNetwork.mutate(cars[i].brain as NeuralNetwork, 0.05);
     }
     console.log(cars[i].brain);
   }
@@ -59,7 +59,7 @@ function discard() {
 function generateCars(n: number) {
   const cars = [];
   for (let i = 0; i < n; i++) {
-    cars.push(new Car(road.getLaneCenter(1), 300, 30, 50, "AI", 5));
+    cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, "AI"));
   }
   return cars;
 }

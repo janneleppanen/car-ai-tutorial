@@ -4,6 +4,14 @@ body {
   overflow: hidden;
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
 }
 
 #roadCanvas {

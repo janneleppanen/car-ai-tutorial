@@ -3,6 +3,9 @@ import Road from "./road";
 import "./style.css";
 import Visualizer from "./vizualizer";
 
+document.getElementById("save-button")?.addEventListener("click", save);
+document.getElementById("discard-button")?.addEventListener("click", discard);
+
 const roadCanvas = document.querySelector<HTMLCanvasElement>("#roadCanvas")!;
 roadCanvas.width = 200;
 const roadCtx = roadCanvas.getContext("2d")!;
@@ -16,7 +19,21 @@ const road = new Road(roadCanvas.width / 2, roadCanvas.width * 0.9);
 const cars = generateCars(100);
 const traffic = [new Car(road.getLaneCenter(1), 400, 30, 50, "DUMMY")];
 
+let bestCar: Car = cars[0];
+
+if (localStorage.getItem("bestBrain")) {
+  bestCar.brain = JSON.parse(localStorage.getItem("bestBrain") || "");
+}
+
 animate();
+
+function save() {
+  localStorage.setItem("bestBrain", JSON.stringify(bestCar?.brain));
+}
+
+function discard() {
+  localStorage.removeItem("bestBrain");
+}
 
 function generateCars(n: number) {
   const cars = [];
@@ -30,7 +47,7 @@ function animate() {
   roadCanvas.height = window.innerHeight;
   networkCanvas.height = window.innerHeight;
 
-  const bestCar = cars.reduce((bestCar: Car, car: Car) => {
+  bestCar = cars.reduce((bestCar: Car, car: Car) => {
     return bestCar.y < car.y ? bestCar : car;
   }, cars[0]);
 

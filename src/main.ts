@@ -4,6 +4,8 @@ import Road from "./road";
 import "./style.css";
 import Visualizer from "./vizualizer";
 
+const N = 100;
+
 document.getElementById("save-button")?.addEventListener("click", save);
 document.getElementById("discard-button")?.addEventListener("click", discard);
 
@@ -17,11 +19,15 @@ networkCanvas.width = 400;
 const networkCtx = networkCanvas.getContext("2d")!;
 
 const road = new Road(roadCanvas.width / 2, roadCanvas.width * 0.9);
-const cars = generateCars(100);
+const cars = generateCars(N);
 const traffic = [
   new Car(road.getLaneCenter(1), -100, 30, 50, "DUMMY", 2),
   new Car(road.getLaneCenter(0), -300, 30, 50, "DUMMY", 2),
   new Car(road.getLaneCenter(2), -300, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(0), -500, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(1), -500, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(1), -700, 30, 50, "DUMMY", 2),
+  new Car(road.getLaneCenter(2), -700, 30, 50, "DUMMY", 2),
 ];
 
 let bestCar: Car = cars[0];
@@ -32,8 +38,9 @@ if (localStorage.getItem("bestBrain")) {
       localStorage.getItem("bestBrain") || ""
     ) as NeuralNetwork;
     cars[i].brain = bestBrain;
+
     if (i != 0 && cars[i].brain) {
-      NeuralNetwork.mutate(cars[i].brain as NeuralNetwork, 0.05);
+      NeuralNetwork.mutate(cars[i].brain as NeuralNetwork, 0.3);
     }
     console.log(cars[i].brain);
   }

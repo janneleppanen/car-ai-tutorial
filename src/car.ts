@@ -74,7 +74,11 @@ class Car {
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D, color: string = "blue") {
+  draw(
+    ctx: CanvasRenderingContext2D,
+    color: string = "blue",
+    shouldDrawSensor: boolean = false
+  ) {
     ctx.fillStyle = this.damaged ? "gray" : color;
 
     ctx.beginPath();
@@ -86,7 +90,7 @@ class Car {
 
     ctx.fill();
 
-    if (this.sensor) {
+    if (this.sensor && shouldDrawSensor) {
       this.sensor.draw(ctx);
     }
   }
